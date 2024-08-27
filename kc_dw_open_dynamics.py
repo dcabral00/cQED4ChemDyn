@@ -148,6 +148,62 @@ def get_op_prep(x, p, mass, k4, k2, k1, cval,
                 sigmoidal_tail,
                 nbasis_eigen=1, basis_type='E', H_type='KC',
                 obs_heaviside=None, LDWcvar=False):
+    """
+    Prepares the operators for the quantum evolution and observable evaluation
+    of double-well like Hamiltonians based upon physical parameters.
+
+    Parameters:
+    x (array-like): The position operator matrix for the system.
+    p (array-like): The momentum operator matrix for the system.
+    mass (float): The mass of the particle or system coordinate under 
+                  consideration.
+    k4 (float): The coefficient for the quartic term in the potential.
+    k2 (float): The coefficient for the quadratic term in the potential.
+    k1 (float): The coefficient for the linear term in the potential.
+    cval (float): A constant value defining the lengthscale equivalence 
+                  between the cQED Kerr-Cat Hamiltonian and chemical double
+                  well potential
+    gamma (float): Bath coupling damping coefficient.
+    nbar (float): Bath thermal parameter.
+    grid_pts (int): Number of grid points for discretization of initial state
+                    guess.
+    grid_lims (tuple): Limits for the grid (min, max).
+    x_cutoff (float): Cutoff value for estimating the transition state 
+                      position (x) to specify initial state localization. 
+    cutoff_value (float): The density cutoff value used to select initial
+                          state guess.
+    filter_type (str): Type of filter to apply ('S'=Sigmoidal, 'H'=Heaviside).
+    sigmoidal_tail (float): Determines decay rate of sigmoidal tail for filter
+    nbasis_eigen (int, optional): Number of basis eigenfunctions to use when
+                                  truncating the operators (default is 1).
+    basis_type (str, optional): Type of basis to use for dynamics propagation
+                                ('E'=eigenbasis, 'F'=Fock). Defaults to 'E'.
+    H_type (str, optional): Type of Hamiltonian ('KC'=cQED Kerr-Cat, 
+                            'DW'=chemical Double-Well). Defaults to 'KC'.
+    obs_heaviside (array-like, optional): If provided, prepares the Heaviside
+                                          observable for calculation of the
+                                          product/reactant correlation 
+                                          function. Defaults to None.
+    LDWcvar (bool, optional): Whether to use the lengthscale matching 
+                              parameter cval for the chemical Double-Well
+                              Lindbladian. Defaults to False.
+
+    Returns:
+    tuple: A tuple containing:
+        - rho0 (array-like): The initial density matrix for dynamics.
+        - superop (array-like): The Lindbladian superoperator for the system.
+        - obs1 (array-like): The first observable measurement operator.
+        - obs2 (array-like): The second observable measurement operator.
+        - obs3 (array-like): The third observable measurement operator.
+
+    Notes:
+    - The function can handle both quantum and classical systems depending on
+      the parameters provided.
+    - Ensure that the grid parameters (grid_pts, grid_lims) are chosen to
+      accurately represent the system's physical characteristics.
+    - The basis and Hamiltonian types should be selected based on the specific
+      system and study goals.
+    """
     assert H_type in ['KC', 'DW']
 
     # Hamiltonian selection and construction
