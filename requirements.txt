@@ -1,0 +1,8 @@
+numpy
+scipy
+matplotlib
+tqdm
+qutip
+notebook
+nb_conda_kernels
+ipywidgets
