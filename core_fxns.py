@@ -35,6 +35,13 @@ def Fock_to_Eigen_basis(target, d_matrix):
 def make_Eigen_real(vecs):
     '''
         Transformed Eigenvectors from complex to real (BRUTE FORCE)
+
+        Arguments:
+        vecs (numpy.ndarray): The matrix of eigenvectors.
+
+        Returns:
+        numpy.ndarray: The matrix of real eigenvectors.
+
     '''
     ndim1, ndim2 = vecs.shape
     for i in range(ndim2):
@@ -47,14 +54,14 @@ def make_Eigen_real(vecs):
 
 def destroy_q(N, offset=0):
     '''
-        Destruction (lowering) operator.
+        Generates the annihilation (lowering) operator for a quantum system.
 
-        Parameters:
-            N (int): dimension of Hilbert space
-            offset (float): Offsetting value entries
+        Arguments:
+        N (int): The dimension of the Hilbert space.
+        offset (int, optional): The offset for subdiagonal location. Defaults to 0.
 
         Returns:
-            off-diagonal matrix containing destruction operator
+        numpy.ndarray: The annihilation operator off-diagonal matrix.
     '''
     if not isinstance(N, (int, np.integer)):  # raise error if N not integer
         raise ValueError("Hilbert space dimension must be integer value")
@@ -64,14 +71,15 @@ def destroy_q(N, offset=0):
 
 def create_q(N, offset=0):
     '''
-        Creation (raising) operator (adjoint of destruction operator)
+        Generates the creation (raising) operator for a quantum system. 
+        (adjoint of destruction operator)
 
-        Parameters:
-            N (int): dimension of Hilbert space
-            offset (float): Offsetting value entries
+        Arguments:
+        N (int): The dimension of the Hilbert space.
+        offset (int, optional): The offset for subdiagonal location. Defaults to 0.
 
         Returns:
-            off-diagonal matrix containing destruction operator
+        numpy.ndarray: The creation operator matrix.
     '''
     if not isinstance(N, (int, np.integer)):  # raise error if N not integer
         raise ValueError("Hilbert space dimension must be integer value")
@@ -80,14 +88,55 @@ def create_q(N, offset=0):
 
 
 def x_op(N, c=1):
+    '''
+        Generates the position operator for a quantum system.
+
+        Arguments:
+        N (int): The dimension of the Hilbert space.
+        c (float, optional): Scaling constant for the position operator.
+                             Defaults to 1.
+
+        Returns:
+        numpy.ndarray: The position operator matrix.
+    '''
     return c * (destroy_q(N) + create_q(N)) / np.sqrt(2)
 
 
 def p_op(N, c=1, hbar=HBAR):
+    '''
+        Generates the momentum operator for a quantum system.
+
+        Arguments:
+        N (int): The dimension of the Hilbert space.
+        c (float, optional): Scaling constant for the momentum operator.
+                             Defaults to 1.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR.
+
+        Returns:
+        numpy.ndarray: The momentum operator matrix.
+    '''
     return 1j * hbar * (create_q(N) - destroy_q(N)) / np.sqrt(2) / c
 
 
 def ladder_op(N, c=1, hbar=HBAR, dagger=False):
+    '''
+        Generates the ladder (creation or annihilation) operator for a
+        quantum system based upon the position and momentum operator
+        representations.
+
+        Arguments:
+        N (int): The dimension of the Hilbert space.
+        c (float, optional): Scaling constant for the ladder operator.
+                             Defaults to 1.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR=1.
+        dagger (bool, optional): If True, returns the creation operator;
+                                 otherwise, returns the annihilation operator.
+                                 Defaults to False.
+
+        Returns:
+        numpy.ndarray: The ladder operator matrix.
+    '''
+
     x_comp = x_op(N, 1) / c
     p_comp = 1j * c * p_op(N, 1) / hbar
     if dagger:
@@ -100,17 +149,24 @@ def kerr_cat_hamiltonian(N, K, epsilon_2, delta, epsilon_1, hbar=HBAR):
         Implements the asymmetric Kerr-Cat Hamiltonian based on the following
         expression:
 
+        $$
         H = delta * (a_dag * a)
             - K * (a_dag)^2a^2
             + epsilon_2 ((a_dag)^2 + a^2)
             + epsilon (a_dag + a)
+        $$
+        Arguments:
+        N (int): The dimension of the Hilbert space.
+        K (float): Kerr nonlinearity constant.
+        epsilon_2 (float): Squeezing drive amplitude.
+        delta (float): Detuning parameter.
+        epsilon_1 (float): Asymmetry parameter.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR.
 
-        Parameters:
-            N (int): dimension of the Hilbert space
-            K (float): Kerr non-linearity parameter
-            epsilon_2 (float): drive frequency
-            delta (float):
-            epsilon_1 (float): asymmetry parameter
+        Returns:
+        numpy.ndarray: The Kerr-cat Hamiltonian matrix.
+
+
     '''
     # Hamiltonian basis operators
     ac = destroy_q(N)
@@ -125,14 +181,27 @@ def kerr_cat_hamiltonian(N, K, epsilon_2, delta, epsilon_1, hbar=HBAR):
 
     # hamiltonian
     H = (delta * nc - K * kc_sq + epsilon_2 * xc_sq + epsilon_1 * xc)
-    return -1 * H * hbar
+    return -1 * H / hbar
 
 
 def get_V_dw(x, k4, k2, k1, grid=False):
     '''
-    Generates the chemical potential V(x) defined with prefactors k4, k2, k1:
+        Generates the chemical potential V(x) defined with prefactors
+        k4, k2, k1 determining the potential shape.
 
-    $$ V(x) = k_{4} x^{4} - k_{2} x^{2} + k_{1} x $$
+        $$ V(x) = k_{4} x^{4} - k_{2} x^{2} + k_{1} x $$
+
+        Arguments:
+        x (numpy.ndarray): Position operator (or grid) at which to evaluate the
+                           potential.
+        k4 (float): Coefficient for the quartic term.
+        k2 (float): Coefficient for the quadratic term.
+        k1 (float): Coefficient for the linear term.
+        grid (bool, optional): If True, returns the potential on a grid.
+                               Defaults to False.
+
+        Returns:
+        numpy.ndarray: The value(s) of the double-well potential.
     '''
     if not grid:
         x_sq = np.matmul(x, x)
@@ -145,17 +214,21 @@ def get_V_dw(x, k4, k2, k1, grid=False):
 
 def get_H_dw(x, p, m, k4, k2, k1):
     '''
-    Generates the Hamiltonian for the chemical potential:
+        Constructs the Hamiltonian for the chemical double-well potential
+        system.
 
-    $$ H = \frac{p^{2}}{2m} + V(x) $$
+        $$ H = \frac{p^{2}}{2m} + V(x) $$
 
-    Inputs:
-        - `x`: np.array of position values
-        - `p`: np.array of momentum values
-        - `m`: mass of the system of interest
-        - `k4`: prefactor for chemical potential (see get_V_dw function)
-        - `k2`: prefactor for chemical potential (see get_V_dw function)
-        - `k1`: prefactor for chemical potential (see get_V_dw function)
+        Arguments:
+        x (numpy.ndarray): Position operator.
+        p (numpy.ndarray): Momentum operator.
+        m (float): Mass of the particle.
+        k4 (float): Coefficient for the quartic term.
+        k2 (float): Coefficient for the quadratic term.
+        k1 (float): Coefficient for the linear term.
+
+        Returns:
+        numpy.ndarray: The Hamiltonian matrix for the double-well system.
     '''
     p_sq = np.matmul(p, p)
     return p_sq/(2*m) + get_V_dw(x, k4, k2, k1)
@@ -163,17 +236,23 @@ def get_H_dw(x, p, m, k4, k2, k1):
 
 def get_H_dw_fock(create_q, destroy_q, m, k4, k2, k1, c=1.0, hbar=HBAR):
     '''
-    Generates the Hamiltonian for the chemical potential:
+        Constructs the Hamiltonian for the chemical double-well potential
+        system in the Fock basis representation.
 
-    $$ H = \frac{p^{2}}{2m} + V(x) $$
+        $$ H = \frac{p^{2}}{2m} + V(x) $$
 
-    Inputs:
-        - `x`: np.array of position values
-        - `p`: np.array of momentum values
-        - `m`: mass of the system of interest
-        - `k4`: prefactor for chemical potential (see get_V_dw function)
-        - `k2`: prefactor for chemical potential (see get_V_dw function)
-        - `k1`: prefactor for chemical potential (see get_V_dw function)
+        Arguments:
+        create_q (numpy.ndarray): Creation operator.
+        destroy_q (numpy.ndarray): Annihilation operator.
+        m (float): Mass of the particle.
+        k4 (float): Coefficient for the quartic term.
+        k2 (float): Coefficient for the quadratic term.
+        k1 (float): Coefficient for the linear term.
+        c (float, optional): Lengthscale scaling constant. Defaults to 1.0.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR.
+
+        Returns:
+        numpy.ndarray: The Hamiltonian matrix in the Fock basis.
     '''
     p = (destroy_q - create_q) / c / np.sqrt(2)
     x = (destroy_q + create_q) * c / np.sqrt(2)
@@ -184,19 +263,22 @@ def get_H_dw_fock(create_q, destroy_q, m, k4, k2, k1, c=1.0, hbar=HBAR):
 def get_H_kc(x, p, m, k4, k2, k1, c=1.0, hbar=HBAR):
     '''
         Generates the Kerr-Cat Hamiltonian in phase space representation, by
-        adding the 4th order momentum and mixed momentum/position operators.
+        adding the 4th order momentum and mixed momentum/position operators
+        to the chemical double-well potential.
 
-        Inputs:
-            - `x`: np.array of position values
-            - `p`: np.array of momentum values
-            - `m`: mass of the system of interest
-            - `k4`: prefactor for chemical potential (see get_V_dw function)
-            - `k2`: prefactor for chemical potential (see get_V_dw function)
-            - `k1`: prefactor for chemical potential (see get_V_dw function)
-            - `c`: scaling factor for equivalence of the chemical
-                   and Kerr-Cat Hamiltonian
-        Output:
-            - : Kerr-Cat Hamiltonian expressed in phase space representation
+        Arguments:
+        x (numpy.ndarray): Position operator.
+        p (numpy.ndarray): Momentum operator.
+        m (float): Mass of the particle.
+        k4 (float): Coefficient for the quartic term.
+        k2 (float): Coefficient for the quadratic term.
+        k1 (float): Coefficient for the linear term.
+        c (float, optional): Lengthscale scaling constant. Defaults to 1.0.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR.
+
+        Returns:
+        numpy.ndarray: The Hamiltonian matrix for the Kerr-Cat model in phase
+                       space representation.
     '''
     dw_segment = get_H_dw(x, p, m, k4, k2, k1)
     K = get_K(k4, c)
@@ -211,32 +293,65 @@ def get_H_kc(x, p, m, k4, k2, k1, c=1.0, hbar=HBAR):
 
 def get_K(k4, c):
     '''
-        Expression for K in terms of chemical variables and correspondence
-        'c' constant
+        Computes the Kerr nonlinearity constant, K, in terms of chemical
+        variables and lengthscale correspondence 'c' constant.
+
+        Arguments:
+        k4 (float): Coefficient for the quartic term.
+        c (float): Lengthscale scaling constant.
+
+        Returns:
+        float: The Kerr nonlinearity constant.
     '''
     return 4 * c**4 * k4
 
 
 def get_Delta(k4, k2, m, c, hbar=HBAR):
     '''
-        Expression for Delta in terms of chemical variables and correspondence
-        'c' constant
+        Computes the detuning parameter, Delta, in terms of chemical
+        variables and lengthscale correspondence 'c' constant.
+
+        Arguments:
+        k4 (float): Coefficient for the quartic term.
+        k2 (float): Coefficient for the quadratic term.
+        m (float): Mass of the particle.
+        c (float): Lengthscale scaling constant.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR.
+
+        Returns:
+        float: The detuning parameter.
     '''
     return c**2 * k2 - hbar**2 / (2 * m * c**2) - 2 * get_K(k4, c)
 
 
 def get_epsilon2(k2, m, c, hbar=HBAR):
     '''
-        Expression for epsilon2 in terms of chemical variables and
-        correspondence 'c' constant
+        Expression for driving amplitude, epsilon2, in terms of chemical
+        variables and lengthscale correspondence 'c' constant.
+
+        Arguments:
+        k2 (float): Coefficient for the quadratic term.
+        m (float): Mass of the particle.
+        c (float): Lengthscale scaling constant.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR.
+
+        Returns:
+        float: The driving amplitude.
     '''
     return c**2 * k2 / 2 + hbar**2 / (4 * m * c**2)
 
 
 def get_epsilon1(k1, c):
     '''
-        Expression for epsilon1 in terms of chemical variables and
-        correspondence 'c' constant
+        Computes the asymmetry parameter epsilon1 in terms of chemical
+        variables and lengthscale correspondence 'c' constant.
+
+        Arguments:
+        k1 (float): Coefficient for the linear term.
+        c (float): Lengthscale scaling constant.
+
+        Returns:
+        float: The asymmetry parameter.
     '''
     return - k1 * c / np.sqrt(2)
 
