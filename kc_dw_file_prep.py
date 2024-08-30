@@ -4,6 +4,27 @@ def generate_script_string(sysname, ham_type,
                            t_tuple=(0.0, 100.0, 1000),
                            script_prefix='kc_dw_open_dynamics.py',
                            t_total_ng_bool=False):
+    '''
+        Generates a command line script string for running quantum
+        dynamics simulations.
+
+        Arguments:
+        sysname (str): The name of the system.
+        ham_type (str): The type of Hamiltonian.
+        nBF (int): Number of Fock basis functions.
+        nBE_tuple (tuple, optional): Tuple of eigenbasis number.
+                                     Defaults to (5, 10, 20, 30).
+        t_tuple (tuple, optional): Tuple of time points for the simulation.
+                                   Defaults to (0.0, 100.0, 1000).
+        script_prefix (str, optional): Prefix for the script name.
+                                       Defaults to 'kc_dw_open_dynamics.py'.
+        t_total_ng_bool (bool, optional): If True, makes time array dependent
+                                          on dissipation parameters time.
+                                          Defaults to False.
+
+        Returns:
+        str: The generated script string.
+    '''
     # -----------------------------------------------------------------------
     #              Reading File Data Parameters
     # -----------------------------------------------------------------------
@@ -56,6 +77,17 @@ def generate_script_string(sysname, ham_type,
 
 
 def write_to_file_sh(fname, header, content):
+    '''
+        Writes a shell script to a file.
+
+        Arguments:
+        fname (str): The name of the file to write to.
+        header (str): The header content for the shell script.
+        content (str): The body content of the shell script.
+
+        Returns:
+        None
+    '''
     file = open(fname + '.sh', 'w')
     file.close()
     with open(fname + '.sh', 'a') as file:

@@ -21,6 +21,16 @@ plt.figure(figsize=(14.4, 7.5))
 
 
 def str_to_bool(value):
+    '''
+        Converts a string representation of truth to a boolean value.
+
+        Arguments:
+        value (str): The string representation of the boolean
+                     ('true'/'false').
+
+        Returns:
+        bool: The corresponding boolean value.
+    '''
     if value.lower() == 'true':
         return True
     elif value.lower() == 'false':

@@ -357,6 +357,19 @@ def get_epsilon1(k1, c):
 
 
 def gen_KC_params_from_DW(m, k4, k2, k1, c=1.0):
+    '''
+        Generates the Kerr-cat parameters from double-well parameters.
+
+        Arguments:
+        m (float): Mass of the particle.
+        k4 (float): Coefficient for the quartic term.
+        k2 (float): Coefficient for the quadratic term.
+        k1 (float): Coefficient for the linear term.
+        c (float, optional): Lengthscale scaling constant. Defaults to 1.0.
+
+        Returns:
+        dict: A dictionary containing the Kerr-cat parameters.
+    '''
     K = get_K(k4, c)
     Delta = get_Delta(k4, k2, m, c)
     e2 = get_epsilon2(k2, m, c)
@@ -365,12 +378,40 @@ def gen_KC_params_from_DW(m, k4, k2, k1, c=1.0):
 
 
 def len_white_space(lwspace, lstr):
+    ''' 
+        Calculates the length of leading white space to pad a string.
+
+        Arguments:
+        lwspace (str): The length of the desired white space.
+        lstr (str): The target string.
+
+        Returns:
+        int: The length of the leading white space.
+    '''
     lws = (lwspace - len(lstr)) / 2
     return (int(np.ceil(lws)), int(np.floor(lws)))
 
 
-def pretty_print(m, k4, k2, k1, c,
-                 print_header=False, K_units=True):
+def pretty_print(m, k4, k2, k1, c, print_header=False, K_units=True):
+    '''
+        Pretty-prints the parameters of a double-well mapped onto the
+        Kerr-Car formalism.
+
+        Arguments:
+        m (float): Mass of the particle.
+        k4 (float): Coefficient for the quartic term.
+        k2 (float): Coefficient for the quadratic term.
+        k1 (float): Coefficient for the linear term.
+        c (float): Lengthscale scaling constant.
+        print_header (bool, optional): If True, prints a header.
+                                       Defaults to False.
+        K_units (bool, optional): If True, prints Kerr-cat parameters in
+                                  Kerr units. Defaults to True.
+
+        Returns:
+        None
+    '''
+
     K, Delta, e2, e1 = gen_KC_params_from_DW(m, k4, k2, k1, c)
 
     str_Delta = 'D'
@@ -405,10 +446,25 @@ def pretty_print(m, k4, k2, k1, c,
               f' {e2:+1.8f} | {e1:+1.8f} |', sep='')
 
 
-
-
 def get_dissipator_xp(N, kappa, nth, c=1, basis_change_matrix=None,
                       hbar=HBAR):
+    '''
+        Constructs the dissipator for the quantum system using a position
+        and momentum operator basis.
+
+        Arguments:
+        N (int): The dimension of the Hilbert space.
+        kappa (float): Bath coupling damping coefficient.
+        nth (float): Bath thermal parameter.
+        c (float, optional): Lengthscale scaling constant. Defaults to 1.0.
+        basis_change_matrix (numpy.ndarray, optional): Basis change matrix for
+                                                       operator transformation.
+                                                       Defaults to None.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR.
+
+        Returns:
+        numpy.ndarray: The dissipator matrix.
+    '''
     # operator definitions
     ac = ladder_op(N, c, hbar)
     ac_dag = ladder_op(N, c, hbar, dagger=True)
@@ -433,6 +489,24 @@ def get_dissipator_xp(N, kappa, nth, c=1, basis_change_matrix=None,
 
 def get_lindbladian_xp(H, kappa, nth, c=1.0, basis_change_matrix=None,
                        hbar=HBAR):
+    '''
+        Constructs the Lindbladian superoperator for a quantum system
+        using a position and momentum operator basis.
+
+
+        Arguments:
+        H (numpy.ndarray): The system Hamiltonian.
+        kappa (float): Bath coupling damping coefficient.
+        nth (float): Bath thermal parameter.
+        c (float, optional): Lengthscale scaling constant. Defaults to 1.0.
+        basis_change_matrix (numpy.ndarray, optional): Basis change matrix for
+                                                       operator transformation.
+                                                       Defaults to None.
+        hbar (float, optional): Reduced Planck's constant. Defaults to HBAR.
+
+        Returns:
+        numpy.ndarray: The Lindbladian superoperator.
+    '''
     d = len(H)  # dimension of the system
 
     if basis_change_matrix is not None:
@@ -450,6 +524,18 @@ def get_lindbladian_xp(H, kappa, nth, c=1.0, basis_change_matrix=None,
 
 
 def Liouvillian(H, Ls, hbar=1):
+    '''
+        Constructs the Liouvillian superoperator for a quantum system.
+
+        Arguments:
+        H (numpy.ndarray): The system Hamiltonian.
+        Ls (list): List of Lindblad operators.
+        hbar (float, optional): Reduced Planck's constant. Defaults to 1.
+
+        Returns:
+        numpy.ndarray: The Liouvillian superoperator.
+    '''
+
     d = len(H)  # dimension of the system
     # Hamiltonian part
     superH = -1j / hbar * (np.kron(np.eye(d), H) - np.kron(H.T, np.eye(d)))
@@ -466,6 +552,15 @@ def propagation_by_semigroup(rho0, superop, dt=0.5, m=20):
         Propagates for a density matrix rho0 with a superoperator for
         m timesteps in increments of dt (superoperator propagates for only
         a single step)
+
+        Arguments:
+        rho0 (numpy.ndarray): The initial density matrix.
+        superop (numpy.ndarray): The semigroup superoperator.
+        dt (float, optional): Time step for propagation. Defaults to 0.5.
+        m (int, optional): Number of time steps. Defaults to 20.
+
+        Returns:
+        numpy.ndarray: The propagated density matrix after m time steps.
     '''
     d = len(rho0)  # dimension or the state
     P = scipy.linalg.expm(superop * dt)  # propagator
@@ -485,11 +580,20 @@ def propagation_by_semigroup(rho0, superop, dt=0.5, m=20):
 
 
 def get_obs_traces(rhots, obs):
-    '''
-        Computes the partial trace between the density operators (rhots) and
-        the observable operator (obs)
+    r'''
+        Computes the partial trace of the observable over a series of density
+        matrices.
 
         $\text{Tr}\\{ \rho _t \rho _{\text{obs}}\\}$
+
+        Arguments:
+        rhots (list of numpy.ndarray): List of density matrices or a 3D array
+                                       with the time evolution of the density
+                                       matrix.
+        obs (numpy.ndarray): The observable to trace.
+
+        Returns:
+        numpy.ndarray: The trace of the observable at each time step.
     '''
     obs_t = []
     for rhot in rhots:
@@ -498,6 +602,18 @@ def get_obs_traces(rhots, obs):
 
 
 def get_QHO_basis(q, level, max_level=250):
+    '''
+        Generates the basis states of a quantum harmonic oscillator.
+
+        Arguments:
+        q (numpy.ndarray): Position grid points.
+        level (int): The level of the quantum harmonic oscillator.
+        max_level (int, optional): Maximum level of the basis states.
+                                   Defaults to 250.
+
+        Returns:
+        numpy.ndarray: The basis states of the quantum harmonic oscillator.
+    '''
     # harmonic oscillator eigenfunctions in position representation
     if level > max_level:
         print(f"ERROR WARNING: REPRESENTATION FAILS BECAUSE {level}! is large"
@@ -516,8 +632,17 @@ def get_grid_init_state_in_fock(levels, grid_state,
         generates the initial state representation in terms of fock
         states.
 
-
         Adapted from code sample by Pouya Khazaei
+
+        Arguments:
+        levels (int): Number of levels in the Fock basis.
+        grid_state (numpy.ndarray): The initial state in grid representation.
+        n_grid_pts (int, optional): Number of grid points. Defaults to None.
+        grid_bound (float, optional): The boundary of the grid.
+                                      Defaults to None.
+
+        Returns:
+        numpy.ndarray: The initial state in the Fock basis.
     '''
     if n_grid_pts is None or grid_bound is None:
         n_grid_pts = grid_state.size
@@ -534,11 +659,23 @@ def get_grid_init_state_in_fock(levels, grid_state,
     return wav / np.linalg.norm(wav)
 
 
-def get_fock_init_state_in_gaussian_grid(fock_state, n_grid_pts,
-                                         grid_bound, levels=None):
+def get_fock_init_state_in_gaussian_grid(fock_state, n_grid_pts, grid_bound,
+                                         levels=None):
     '''
         Given a particular fock state returns its grid based representation
         for a given number of grid points and grid boundary.
+
+        Adapted from code sample by Pouya Khazaei
+
+        Arguments:
+        fock_state (numpy.ndarray): The initial state in the Fock basis.
+        n_grid_pts (int): Number of grid points.
+        grid_bound (float): The boundary of the grid.
+        levels (int, optional): Number of levels in the Fock basis.
+                                Defaults to None.
+
+        Returns:
+        numpy.ndarray: The initial state in the Gaussian grid representation.
 
         Test:
         ng = 5000 # size of grid
@@ -550,8 +687,6 @@ def get_fock_init_state_in_gaussian_grid(fock_state, n_grid_pts,
                                                         fock_state, ng, l)
         plt.plot(x_fock, gaussianfock)
         plt.show()
-
-        Adapted from code sample by Pouya Khazaei
     '''
     fock_state = np.array(fock_state)
     fock_state = fock_state / np.linalg.norm(fock_state)
@@ -570,8 +705,20 @@ def get_fock_init_state_in_gaussian_grid(fock_state, n_grid_pts,
 
 def get_sigmoidal(x, x0=0.0, tail=1.0):
     '''
+        Computes the sigmoidal function for a given input.
+
         Note: sigmoidal function should have negative exponent;
         ie 1/ (1+e^(-(x-x0)/tail)) according to the definition
+
+        Arguments:
+        x (numpy.ndarray): Input values.
+        x0 (float, optional): The inflection point of the sigmoidal function.
+                              Defaults to 0.0.
+        tail (float, optional): The tail of the sigmoidal function.
+                                Defaults to 1.0.
+
+        Returns:
+        numpy.ndarray: The output of the sigmoidal function.
     '''
     sigmoidal = []
     for y in x:
@@ -580,6 +727,17 @@ def get_sigmoidal(x, x0=0.0, tail=1.0):
 
 
 def get_heaviside(x, x0=0.0):
+    '''
+        Computes the Heaviside step function for a given input.
+
+        Arguments:
+        x (numpy.ndarray): Input values.
+        x0 (float, optional): The step location of the Heaviside function.
+                              Defaults to 0.0.
+
+        Returns:
+        numpy.ndarray: The output of the Heaviside step function.
+    '''
     heaviside = np.array([1 if y > x0 else 0 for y in x])
     return heaviside
 
@@ -703,8 +861,20 @@ def filter_state_by_xvalues(all_states, n_grid_pts, grid_bound, x_split=0.,
 
 
 def get_heaviside_observable(levels, n_grid_pts, grid_bound, x0=0.0):
-    ''' Generates a Heaviside observable on a Fock basis representation '''
+    '''
+        Generates the Heaviside observable for a quantum system based on
+        x-values.
 
+        Arguments:
+        levels (int): Number of levels in the quantum system.
+        n_grid_pts (int): Number of grid points.
+        grid_bound (float): The boundary of the grid.
+        x0 (float, optional): The step location of the Heaviside function.
+                              Defaults to 0.0.
+
+        Returns:
+        numpy.ndarray: The Heaviside observable matrix.
+    '''
     # define grid
     x = np.linspace(-grid_bound, grid_bound, n_grid_pts)
 
