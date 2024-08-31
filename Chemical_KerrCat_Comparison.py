@@ -76,8 +76,11 @@ class Chemical_KerrCat_Analysis:
 
         $$ V(x) = k_{4} x^{4} - k_{2} x^{2} + k_{1} x $$
 
-        Inputs:
-            - `xv`: qutip.Qobj or np.array of position values
+        Arguments:
+            - `xv` (qutip.Qobj or np.array): position values
+
+        Returns:
+            - (qutip.Qobj or np.array): potential energy
         '''
         return(self.k4*xv**4 - self.k2*xv**2 + self.k1*xv)
 
@@ -88,13 +91,16 @@ class Chemical_KerrCat_Analysis:
 
         $$ H = \frac{p^{2}}{2m} + V(x) $$
 
-        Inputs:
-            - `x`: qt.Qobj or np.array of position values
-            - `p`: qt.Qobj or np.array of momentum values
-            - `mass`: mass of the system of interest
-            - `k4`: prefactor for chemical potential (see get_V_dw function)
-            - `k2`: prefactor for chemical potential (see get_V_dw function)
-            - `k1`: prefactor for chemical potential (see get_V_dw function)
+        Arguments:
+            - `x` (qt.Qobj or np.array): position operator/list of position values at which to evaluate the potential energy
+            - `p`(qt.Qobj or np.array): momentum operator/list of momentum values at which to evaluate the potential energy
+            - `mass` (float): mass of the system of interest
+            - `k4` (float): prefactor for chemical potential (see get_V_dw function)
+            - `k2` (float): prefactor for chemical potential (see get_V_dw function)
+            - `k1` (float): prefactor for chemical potential (see get_V_dw function)
+
+        Returns:
+            - `H_op` (qutip.Qobj or np.array): Hamiltonian as defined above.
         '''
         T_op        = self.P_op**2 / (2. * self.mass)
         V_op        = self._get_V_chem(self.X_op)
@@ -172,17 +178,17 @@ class Chemical_KerrCat_Analysis:
             Generates the Kerr-Cat Hamiltonian in phase space representation, by
             adding the 4th order momentum and mixed momentum/position operators.
 
-            Inputs:
-                - `x`: qt.Qobj or np.array of position values
-                - `p`: qt.Qobj or np.array of momentum values
-                - `mass`: mass of the system of interest
-                - `k4`: prefactor for chemical potential (see get_V_dw function)
-                - `k2`: prefactor for chemical potential (see get_V_dw function)
-                - `k1`: prefactor for chemical potential (see get_V_dw function)
-                - `c`: scaling factor for equivalence of the chemical
+            Arguments:
+                - `x` (qt.Qobj or np.array): position operator/list of position values at which to evaluate the potential energy
+                - `p`(qt.Qobj or np.array): momentum operator/list of momentum values at which to evaluate the potential energy
+                - `mass` (float): mass of the system of interest
+                - `k4` (float): prefactor for chemical potential (see get_V_dw function)
+                - `k2` (float): prefactor for chemical potential (see get_V_dw function)
+                - `k1` (float): prefactor for chemical potential (see get_V_dw function)
+                - `c` (float): scaling factor for equivalence of the chemical
                        and Kerr-Cat Hamiltonian
-            Output:
-                - : Kerr-Cat Hamiltonian expressed in phase space representation
+            Returns:
+                - (qt.Qobj or np.array): Kerr-Cat Hamiltonian expressed in phase space representation
         '''
         dw_segment = self.H_chem
         kc_segment = 0.25 * tmp_K / self.hbar**4 * ((tmp_c**4 * self.P_op**4) + self.hbar**2 * (self.X_op**2 * self.P_op**2 + self.P_op**2 * self.X_op**2))
@@ -195,8 +201,13 @@ class Chemical_KerrCat_Analysis:
     def _unscramble_indices(self, kc_ens, kc_wfns):
         '''
         Function to unscramble the wavefunction indices.
-            - `kc_ens`: kerr-cat energies
-            - `kc_wfns`: chemical hamiltonian eigenstates
+        Arguments:
+            - `kc_ens` (np.array or list): kerr-cat energies
+            - `kc_wfns` (np.ndarray or list): chemical hamiltonian eigenstates
+
+        Returns:
+            - `index_mapping` (np.ndarray): mapping of scrambled to properly ordered indices for the KC wavefunctions
+            - `out_overlaps` (list): calculated overlaps
         '''
         chem_ens  = self.chemical_data['Energies']
         chem_wfns = self.chemical_data['Wavefunctions']
@@ -253,9 +264,9 @@ class Chemical_KerrCat_Analysis:
         '''
         Function to unscramble states over the c index.
 
-        Inputs:
-                - `n_states`: int, determines the number of states to do the unscrambling for
-                - `state_span`: int, determines the span of neighboring c-values to check
+        Arguments:
+                - `n_states` (int): determines the number of states to do the unscrambling for
+                - `state_span` (int): determines the span of neighboring c-values to check
         '''
         corrected_overlaps = []
         corrected_idx = []
@@ -292,10 +303,10 @@ class Chemical_KerrCat_Analysis:
         Function to initialize np.array of x-values used to calculate
         the potential V(x) for plotting purposes.
 
-        Inputs:
-            - `xplot_min`: minimum value of array (Default: -4)
-            - `xplot_max`: maximum value of array (Default: 4)
-            - `N_xplot`: Number of points in array spanning from xplot_min to xplot_max
+        Arguments:
+            - `xplot_min` (int/float): minimum value of array (Default: -4)
+            - `xplot_max` (int/float): maximum value of array (Default: 4)
+            - `N_xplot` (int): Number of points in array spanning from xplot_min to xplot_max
         '''
         self.N_xplot          = self.N_basis if N_xplot is None else N_xplot
         self.xplot            = np.linspace(xplot_min, xplot_max, self.N_xplot)
@@ -307,11 +318,11 @@ class Chemical_KerrCat_Analysis:
         '''
         Function to create an array of c-values to calculate Kerr-cat parameters with.
 
-        Inputs:
-            - `c_min`: minimum of array (Default: 0.0)
-            - `c_max`: maximum of array (Default: 0.6)
-            - `c_step`: step_size used in the array creation
-            - `do_phi_ZPS`: (Boolean) flag to determine whether we do the calculation in terms of c of $\phi_{ZPS}$
+        Arguments:
+            - `c_min` (float): minimum of array (Default: 0.0)
+            - `c_max` (float): maximum of array (Default: 0.6)
+            - `c_step` (float): step_size used in the array creation
+            - `do_phi_ZPS` (Boolean): flag to determine whether we do the calculation in terms of c of $\phi_{ZPS}$
         '''
         _cvalz    = np.arange(c_min, c_max, step=c_step)
         if do_phi_ZPS:
@@ -397,11 +408,11 @@ class Chemical_KerrCat_Analysis:
         '''
         Obtain the analytical solutions of the harmonic oscillator by expansion in the basis of Hermite polynomials.
         This function takes the following parameters:
-        - k is the order of the Hermite Polynomial
-        - x is the input position parameter over which the Hermite Polynomial is calculated
-        - x0 is the initial displacement of the oscillator
-        - p0 is the initial momentum of the oscillator
-        - alpha is the width of the Gaussian
+        - `k` (int): order of the Hermite Polynomial
+        - x (np.array): position values over which the Hermite Polynomial is calculated
+        - x0 (float): initial displacement of the oscillator
+        - p0 (float): initial momentum of the oscillator
+        - alpha (float): width of the Gaussian
         '''
         herman = eval_hermite(k, x)*np.exp(-alpha/2*((x - x0)**2)+1j*p0*(x - x0))*((alpha/np.pi)**(0.25))/(2**(k/2))/np.sqrt(factorial(k))
         return herman
@@ -423,11 +434,11 @@ class Chemical_KerrCat_Analysis:
             This is a function to plot the wavefunctions of the chemical system Hamiltonian alongside
             the wavefunctions of the Kerr-Cat Hamiltonian at a given value of c.
 
-            Inputs:
-                - `cval2plot`: (float) The value of c at which the Kerr-Cat Hamiltonian wavefunctions were computed.
-                - `wfn_scale`: (float) An arbitrary scaling factor to ensure that the wavefunctions look nice when plotted on the P.E. surface.
-                - `n_plotted`: (int) The number of wavefunctions to plot.
-                - `plot_title`: (str) The title for the plot.
+            Arguments:
+                - `cval2plot` (float): The value of c at which the Kerr-Cat Hamiltonian wavefunctions were computed.
+                - `wfn_scale` (float): An arbitrary scaling factor to ensure that the wavefunctions look nice when plotted on the P.E. surface.
+                - `n_plotted` (int): The number of wavefunctions to plot.
+                - `plot_title` (str): The title for the plot.
         '''
         if type(cval2plot) == type(None):
             print('You must provide a value of c to plot the wavefunctions at!')
@@ -483,8 +494,8 @@ class Chemical_KerrCat_Analysis:
                 gs_kc = -1.*gs_kc
                 overlap = gs_dw.conj().dot(gs_kc).real
             print('Overlap for State {}:\t{}'.format(ii, np.round(overlap, 6)))
-            ax.plot(self.xplot, wfn_scale*gs_dw.real+scaled_ens_dw[fixed_index], color='red')
-            ax.plot(self.xplot, wfn_scale*gs_kc.real+scaled_ens_dw[fixed_index], color='blue', linestyle='dashed')
+            ax.plot(self.xplot, wfn_scale*gs_dw.real+scaled_ens_dw[fixed_index], color='crimson')
+            ax.plot(self.xplot, wfn_scale*gs_kc.real+scaled_ens_dw[fixed_index], color='dodgerblue', linestyle='dashed')
 
         ax.set_xlabel(r'$x$ ($a_0$)')
         ax.set_ylabel(r'Energy (m$E_{\mathrm{h}}$)')
