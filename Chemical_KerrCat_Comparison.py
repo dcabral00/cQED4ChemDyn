@@ -399,6 +399,8 @@ class Chemical_KerrCat_Analysis:
         plt.tight_layout()
         if save_figs:
             os.makedirs(self.savedir, exist_ok=True)
+            os.makedirs(self.savedir+'/pdf', exist_ok=True)
+            os.makedirs(self.savedir+'/png', exist_ok=True)
             plt.savefig('{}/pdf/{}-Overlaps-Params_Eoffset.pdf'.format(self.savedir, self.system_name), dpi=600)
             plt.savefig('{}/png/{}-Overlaps-Params_Eoffset.png'.format(self.savedir, self.system_name), dpi=600)
         plt.show()
@@ -511,6 +513,8 @@ class Chemical_KerrCat_Analysis:
 
         if save_figs:
             os.makedirs(self.savedir, exist_ok=True)
+            os.makedirs(self.savedir+'/pdf', exist_ok=True)
+            os.makedirs(self.savedir+'/png', exist_ok=True)
             plt.savefig('{}/pdf/{}-Wavefunctions_on_Potential.pdf'.format(self.savedir, self.system_name), dpi=600)
             plt.savefig('{}/png/{}-Wavefunctions_on_Potential.png'.format(self.savedir, self.system_name), dpi=600)
         else:
