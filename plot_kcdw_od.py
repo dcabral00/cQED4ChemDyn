@@ -416,10 +416,10 @@ def get_traj_plot(xs, ys, obs=2,
                                Tx_error=Tx_error[ii % 2])
         plt_row_idx += 1
     if outdir and savename:
-        fname = (f'{outdir}/{system}_{savename}_pltTraj_{plt_traj}_'
+        fname = (f'{system}_{savename}_pltTraj_{plt_traj}_'
                  f'pltTx_{plt_Tx}_LDWcvar{LDWcvar}_obs{obs}')
-        plt.savefig(fname + '.png', dpi=600)
-        plt.savefig(fname + '.pdf', dpi=600)
+        plt.savefig(f'{outdir}/png/{fname}.png', dpi=600)
+        plt.savefig(f'{outdir}/pdf/{fname}.pdf', dpi=600)
         return None
     else:
         plt.show()
@@ -435,7 +435,7 @@ if __name__ == '__main__':
                    'adenine_thymine',
                    'guanine_cytosine']
 
-    folder_list = [f'gamma0.1_nbar0.1_NbF_{nbasis_F}']
+    folder_list = ['Results/data']
     diss_list = [(0.1, 0.1)]
     t_lims_list = [(0.0, 200.0, 1.0)]
     plot_params_dict = {
@@ -500,7 +500,8 @@ if __name__ == '__main__':
                           phi_zps=False,
                           plt_KC=True, plt_DW=True, LDWcvar=True,
                           tx_yscale='log',
-                          outdir='./', savename=folder, system=entry,
-                          plt_Txerror=True,
+                          outdir='./Results',
+                          savename=f'gamma{gamma}_nbar{nbar}',
+                          system=entry, plt_Txerror=True,
                           Tx_error=[data_DW['timescale_error'][4:].T,
                                     data_KC['timescale_error'][4:].T])

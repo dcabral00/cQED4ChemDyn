@@ -132,4 +132,5 @@ While the code can be executed within a Jupyter notebook, we recommend using the
 For questions, comments, or support, please contact:
 
 Delmar G. A. Cabral (delmar.azevedocabral@yale.edu)
+
 Brandon C. Allen (brandon.allen@yale.edu)
