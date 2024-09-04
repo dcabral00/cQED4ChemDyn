@@ -483,7 +483,7 @@ class Chemical_KerrCat_Analysis:
         x_max  = max(self.xplot)
 
         y_max  = np.ceil(max(1000*scaled_ens_dw[:n_plotted]))/1000
-        fig, ax = plt.subplots(1, 1, figsize=(7.5, 7.5))
+        fig, ax = plt.subplots(1, 1, figsize=(6.5, 6.5), dpi=100)
         ax.plot(self.xplot, scaled_V, color='k')
         for ii in range(n_plotted):
             fixed_index = index_mapping[ii]
@@ -495,7 +495,6 @@ class Chemical_KerrCat_Analysis:
 
             overlap = gs_dw.conj().dot(gs_kc).real
             if overlap < 0:
-                print(overlap)
                 gs_kc = -1.*gs_kc
                 overlap = gs_dw.conj().dot(gs_kc).real
             print('Overlap for State {}:\t{}'.format(ii, np.round(overlap, 6)))
