@@ -9,6 +9,9 @@ from scipy.special import eval_hermite, factorial
 from numpy.polynomial.hermite import hermval
 
 
+plt.rcParams['figure.constrained_layout.use'] = True
+
+
 class Chemical_KerrCat_Analysis:
     def __init__(self, N_basis=None, system_name=None, mass=None, k1=None,
                  k2=None, k4=None, savedir=None, hbar=1.):
@@ -396,7 +399,7 @@ class Chemical_KerrCat_Analysis:
         ax[1].set_xticks(ticks=[0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
         plt.legend(fontsize=18, loc='lower left')
         plt.suptitle(title_text, y=0.95, fontsize=20)
-        plt.tight_layout()
+        # plt.tight_layout()
         if save_figs:
             os.makedirs(self.savedir, exist_ok=True)
             os.makedirs(self.savedir+'/pdf', exist_ok=True)
@@ -509,7 +512,7 @@ class Chemical_KerrCat_Analysis:
         ax.set_ylim(-0.0001, y_maxrange) # Adenine-Thymine
         ax.set_xlim(x_min, x_max)
         ax.set_title(plot_title)
-        plt.tight_layout()
+        # plt.tight_layout()
 
         if save_figs:
             os.makedirs(self.savedir, exist_ok=True)
