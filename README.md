@@ -1,14 +1,35 @@
+[![License: GNU AGPL v3](https://img.shields.io/badge/License-GNU_AGPL_v3-lightgrey.svg)](LICENCE)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dcabral00/cQED4ChemDyn/blob/main/kcdw_od_demo.ipynb)
+
+
 # cQED4ChemDyn
 
 This repository provides an implementation that connects chemical kinetics of elementary reactivity models with the framework of the Kerr-Cat circuit quantum electrodynamics (cQED), using the Hamiltonian describing the physics of the hardware and a Lindbladian open quantum dynamics formalism for the time-evolution of the system. For more information, check the existing citation for the publication at the bottom of this Readme; any usage of this code should cite the preprint (and publications) once available.
 
-## Getting Started
 
-### Installation
+## Table of Contents
+
+1. [Getting Started](#start)
+   - [Installation](#install)
+     - [Using Conda](#c_install)
+     - [Manual Installation](#m_install)
+2. [Running cQED4ChemDyn](#cQED4ChemDyn)
+   - [Jupyter Notebook Demo](#jupyter)
+3. [Disclaimer](#disclaimer)
+4. [Citation](#citation)
+5. [Contact](#contact)
+6. [License](#license)
+
+
+## Getting Started <a name="start"></a>
+
+
+### Installation <a name="install"></a>
 
 To set up the environment for executing the code in this repository, you have two options: using `conda` or installing packages manually.
 
-#### Using Conda
+
+#### Using Conda <a name="c_install"></a>
 
 1. **Clone the Repository**:
    Choose a target folder location and clone the repository:
@@ -26,7 +47,8 @@ To set up the environment for executing the code in this repository, you have tw
 
    This will install all necessary dependencies for running the scripts in this repository.
 
-#### Manual Installation
+
+#### Manual Installation <a name="m_install"></a>
 
 Alternatively, you can manually install the required packages listed in the `requirements.txt` file:
 
@@ -45,7 +67,8 @@ Alternatively, you can manually install the required packages listed in the `req
 
    This command will install all the dependencies specified in the `requirements.txt` file.
 
-### Running cQED4ChemDyn
+
+## Running cQED4ChemDyn <a name="cQED4ChemDyn"></a>
 
 Once the environment is set up, the `kc_dw_open_dynamics.py` can simulate the open quantum dynamics of chemical double-well systems and output data suitable for calculation of kinetic observables. It contains a command line interface supporting the necessary arguments,
    ```bash
@@ -106,31 +129,39 @@ in the associated publication.
 
 Benchmark to reproduce the Kerr-Cat cQED device physics is also provided within the folder. These modules reproduce the dynamical data used in the supporting information (Lindblad diagonalization and propagation) for timescale fit with a scan over $\epsilon _1$ and $\epsilon _2$ for $\Delta = 0$.
 
-### Jupyter Notebook Demo
+
+### Jupyter Notebook Demo <a name="jupyter"></a>
 
 For a quick and interactive way to explore the parameter equivalence between chemical systems and the Kerr-Cat
-cQED platform, use the Jupyter Notebook through Google Colab [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dcabral00/cQED4ChemDyn/blob/main/KerrCat-Parameter-Plots-Github.ipynb)  or
-   ```bash
-   jupyter notebook KerrCat-Parameter-Plots-Github.ipynb
-   ```
+cQED platform
+and a demonstration of the open quantum dynamics functionality, use
 
-For a demonstration of the open quantum dynamics functionality, use [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dcabral00/cQED4ChemDyn/blob/main/kcdw_od_demo.ipynb) or
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dcabral00/cQED4ChemDyn/blob/main/kcdw_od_demo.ipynb)
    ```bash
    jupyter notebook kcdw_od_demo.ipynb
    ```
 
-### Citation
 
-Please cite the preprint of our work when using this code until the journal version becomes available.
-
-### Disclaimer
+## Disclaimer <a name="disclaimer"></a>
 
 While the code can be executed within a Jupyter notebook, we recommend using the provided Python modules for research applications and production-level development. The Jupyter notebook version, while convenient for initial exploration and experimentation, may lack the robustness and scalability of the provided Python modules. This repository is a snapshot of a broader collection of tools developed for continued research advancement, which forms the foundation of ongoing studies aimed at advancing the research presented. The complete library will be released at a later time.
 
-### Contact
+
+## Citation <a name="citation"></a>
+
+Please cite the preprint of our work when using this code until the journal version becomes available.
+
+
+## Contact <a name="contact"></a>
 
 For questions, comments, or support, please contact:
 
 Delmar G. A. Cabral (delmar.azevedocabral@yale.edu)
 
 Brandon C. Allen (brandon.allen@yale.edu)
+
+
+## License <a name="license"></a>
+
+This source code is licensed under the GNU AGPL v3 license found in the `LICENSE` file
+in the root directory of this source tree.
