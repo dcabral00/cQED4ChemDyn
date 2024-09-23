@@ -1,7 +1,7 @@
 [![License: GNU AGPL v3](https://img.shields.io/badge/License-GNU_AGPL_v3-lightgrey.svg)](LICENCE)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dcabral00/cQED4ChemDyn/blob/main/kcdw_od_demo.ipynb)
-![Static Badge](https://img.shields.io/badge/2409.13114-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph&color=B31B1B)
-![Static Badge](https://img.shields.io/badge/2409.13113-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph&color=B31B1B)
+[![Static Badge](https://img.shields.io/badge/2409.13114-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph)](https://arxiv.org/abs/2409.13114)
+[![Static Badge](https://img.shields.io/badge/2409.13113-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph)](https://arxiv.org/abs/2409.13113)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13826722.svg)](https://doi.org/10.5281/zenodo.13826722)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13694461.svg)](https://doi.org/10.5281/zenodo.13694461)
 
@@ -167,7 +167,8 @@ While the code can be executed within a Jupyter notebook, we recommend using the
 
 Please cite the preprint of our work when using this code until the journal version becomes available.
 
-![Static Badge](https://img.shields.io/badge/2409.13114-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph&color=B31B1B)
+[![Static Badge](https://img.shields.io/badge/2409.13114-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph)](https://arxiv.org/abs/2409.13114)
+
 ```
 @misc{cabral2024roadmapsimulatingchemicaldynamics,
       title={A Roadmap for Simulating Chemical Dynamics on a Parametrically Driven Bosonic Quantum Device},
@@ -181,7 +182,8 @@ Please cite the preprint of our work when using this code until the journal vers
       url={https://arxiv.org/abs/2409.13114},
 }
 ```
-![Static Badge](https://img.shields.io/badge/2409.13113-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph&color=B31B1B)
+[![Static Badge](https://img.shields.io/badge/2409.13113-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph)](https://arxiv.org/abs/2409.13113)
+
 ```
 @misc{dealbornoz2024oscillatorydissipativetunnelingasymmetric,
       title={Oscillatory dissipative tunneling in an asymmetric double-well potential}, 
