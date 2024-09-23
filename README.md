@@ -1,5 +1,9 @@
 [![License: GNU AGPL v3](https://img.shields.io/badge/License-GNU_AGPL_v3-lightgrey.svg)](LICENCE)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dcabral00/cQED4ChemDyn/blob/main/kcdw_od_demo.ipynb)
+![Static Badge](https://img.shields.io/badge/2409.13114-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph&color=B31B1B)
+![Static Badge](https://img.shields.io/badge/2409.13113-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph&color=B31B1B)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13826722.svg)](https://doi.org/10.5281/zenodo.13826722)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13694461.svg)](https://doi.org/10.5281/zenodo.13694461)
 
 # cQED4ChemDyn
 
@@ -13,11 +17,13 @@ This repository provides an implementation that connects chemical kinetics of el
      - [Using Conda](#c_install)
      - [Manual Installation](#m_install)
 2. [Running cQED4ChemDyn](#cQED4ChemDyn)
+   - [Command Line Interface](#cli)
    - [Jupyter Notebook Demo](#jupyter)
-3. [Disclaimer](#disclaimer)
-4. [Citation](#citation)
-5. [Contact](#contact)
-6. [License](#license)
+   - [Dataset](#dataset)
+4. [Disclaimer](#disclaimer)
+5. [Citation](#citation)
+6. [Contact](#contact)
+7. [License](#license)
 
 
 ## Getting Started <a name="start"></a>
@@ -69,8 +75,10 @@ Alternatively, you can manually install the required packages listed in the `req
 
 ## Running cQED4ChemDyn <a name="cQED4ChemDyn"></a>
 
+### Command Line Interface <a name="cli"></a>
+
 Once the environment is set up, the `kc_dw_open_dynamics.py` can simulate the open quantum dynamics of chemical double-well systems and output data suitable for calculation of kinetic observables. It contains a command line interface supporting the necessary arguments,
-   ```bash
+   ```
    usage: kc_dw_open_dynamics.py [-h] [-basis_type {E,F}] [-nbasis_fock NBASIS_FOCK]
                                  [-nbasis_eigen NBASIS_EIGEN] [-mass MASS] [-k4 K4] [-k2 K2] [-k1 K1]
                                  [-c_min C_MIN] [-c_max C_MAX] [-c_inc C_INC] [-gamma GAMMA] [-nbar NBAR]
@@ -141,6 +149,15 @@ and a demonstration of the open quantum dynamics functionality, use
    ```
 
 
+### Dataset <a name="dataset"></a>
+
+The complete dynamics trajectories dataset used in the manuscript and supporting information is hosted at
+Zenodo:
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13694461.svg)](https://doi.org/10.5281/zenodo.13694461)
+
+
+
 ## Disclaimer <a name="disclaimer"></a>
 
 While the code can be executed within a Jupyter notebook, we recommend using the provided Python modules for research applications and production-level development. The Jupyter notebook version, while convenient for initial exploration and experimentation, may lack the robustness and scalability of the provided Python modules. This repository is a snapshot of a broader collection of tools developed for continued research advancement, which forms the foundation of ongoing studies aimed at advancing the research presented. The complete library will be released at a later time.
@@ -150,10 +167,13 @@ While the code can be executed within a Jupyter notebook, we recommend using the
 
 Please cite the preprint of our work when using this code until the journal version becomes available.
 
+![Static Badge](https://img.shields.io/badge/2409.13114-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph&color=B31B1B)
 ```
 @misc{cabral2024roadmapsimulatingchemicaldynamics,
       title={A Roadmap for Simulating Chemical Dynamics on a Parametrically Driven Bosonic Quantum Device},
-      author={Delmar G. A. Cabral and Pouya Khazaei and Brandon C. Allen and Pablo E. Videla and Max Schäfer and Rodrigo G. Cortiñas and Alejandro Cros Carrillo de Albornoz and Jorge Chávez-Carlos and Lea F. Santos and Eitan Geva and Victor S. Batista},
+      author={Delmar G. A. Cabral and Pouya Khazaei and Brandon C. Allen and Pablo E. Videla and Max Schäfer and
+              Rodrigo G. Cortiñas and Alejandro Cros Carrillo de Albornoz and Jorge Chávez-Carlos and
+              Lea F. Santos and Eitan Geva and Victor S. Batista},
       year={2024},
       eprint={2409.13114},
       archivePrefix={arXiv},
@@ -161,16 +181,31 @@ Please cite the preprint of our work when using this code until the journal vers
       url={https://arxiv.org/abs/2409.13114},
 }
 ```
-
+![Static Badge](https://img.shields.io/badge/2409.13113-B31B1B?logo=arxiv&logoColor=B31B1B&label=quant-ph&color=B31B1B)
 ```
 @misc{dealbornoz2024oscillatorydissipativetunnelingasymmetric,
       title={Oscillatory dissipative tunneling in an asymmetric double-well potential}, 
-      author={Alejandro Cros Carrillo de Albornoz and Rodrigo G. Cortiñas and Max Schäfer and Nicholas E. Frattini and Brandon Allen and Delmar G. A. Cabral and Pablo E. Videla and Pouya Khazaei and Eitan Geva and Victor S. Batista and Michel H. Devoret},
+      author={Alejandro Cros Carrillo de Albornoz and Rodrigo G. Cortiñas and Max Schäfer and Nicholas E. Frattini and
+              Brandon Allen and Delmar G. A. Cabral and Pablo E. Videla and Pouya Khazaei and Eitan Geva and
+              Victor S. Batista and Michel H. Devoret},
       year={2024},
       eprint={2409.13113},
       archivePrefix={arXiv},
       primaryClass={quant-ph},
       url={https://arxiv.org/abs/2409.13113}, 
+}
+```
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13826722.svg)](https://doi.org/10.5281/zenodo.13826722)
+```
+@software{cabral2024_code,
+  author       = {A. Cabral, Delmar G. and C. Allen, Brandon},
+  title        = {cQED4ChemDyn},
+  month        = sep,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {1.0.0},
+  doi          = {10.5281/zenodo.13826722},
+  url          = {https://doi.org/10.5281/zenodo.13826722}
 }
 ```
 
