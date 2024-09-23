@@ -1,7 +1,6 @@
 [![License: GNU AGPL v3](https://img.shields.io/badge/License-GNU_AGPL_v3-lightgrey.svg)](LICENCE)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dcabral00/cQED4ChemDyn/blob/main/kcdw_od_demo.ipynb)
 
-
 # cQED4ChemDyn
 
 This repository provides an implementation that connects chemical kinetics of elementary reactivity models with the framework of the Kerr-Cat circuit quantum electrodynamics (cQED), using the Hamiltonian describing the physics of the hardware and a Lindbladian open quantum dynamics formalism for the time-evolution of the system. For more information, check the existing citation for the publication at the bottom of this Readme; any usage of this code should cite the preprint (and publications) once available.
@@ -151,6 +150,29 @@ While the code can be executed within a Jupyter notebook, we recommend using the
 
 Please cite the preprint of our work when using this code until the journal version becomes available.
 
+```
+@misc{cabral2024roadmapsimulatingchemicaldynamics,
+      title={A Roadmap for Simulating Chemical Dynamics on a Parametrically Driven Bosonic Quantum Device},
+      author={Delmar G. A. Cabral and Pouya Khazaei and Brandon C. Allen and Pablo E. Videla and Max Schäfer and Rodrigo G. Cortiñas and Alejandro Cros Carrillo de Albornoz and Jorge Chávez-Carlos and Lea F. Santos and Eitan Geva and Victor S. Batista},
+      year={2024},
+      eprint={2409.13114},
+      archivePrefix={arXiv},
+      primaryClass={quant-ph},
+      url={https://arxiv.org/abs/2409.13114},
+}
+```
+
+```
+@misc{dealbornoz2024oscillatorydissipativetunnelingasymmetric,
+      title={Oscillatory dissipative tunneling in an asymmetric double-well potential}, 
+      author={Alejandro Cros Carrillo de Albornoz and Rodrigo G. Cortiñas and Max Schäfer and Nicholas E. Frattini and Brandon Allen and Delmar G. A. Cabral and Pablo E. Videla and Pouya Khazaei and Eitan Geva and Victor S. Batista and Michel H. Devoret},
+      year={2024},
+      eprint={2409.13113},
+      archivePrefix={arXiv},
+      primaryClass={quant-ph},
+      url={https://arxiv.org/abs/2409.13113}, 
+}
+```
 
 ## Contact <a name="contact"></a>
 
